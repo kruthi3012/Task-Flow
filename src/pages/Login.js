@@ -7,15 +7,29 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import postRequest from "../api_post_request";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Login() {
-  const handleSubmit = (event) => {
+
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    let email = data.get("email")
+    let password = data.get("password")
+
     console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+      email: email,
+      password: password,
     });
+    let resp = await postRequest("http://127.0.0.1:4000/authenticate/", {email:email, password:password});
+
+    console.log(resp.message)
+
   };
 
   return (
